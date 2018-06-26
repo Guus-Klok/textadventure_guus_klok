@@ -16,27 +16,31 @@ namespace ZuulCS
 
         private void createRooms()
         {
-            Room outside, theatre, pub, lab, office, attic;
+            Room outside, PokeGym, pokecentre, lab, office, attic, tree;
 
             // create the rooms
-            outside = new Room("outside the main entrance of the university");
-            theatre = new Room("in a lecture theatre");
-            pub = new Room("in the campus pub");
-            lab = new Room("in a computing lab");
-            office = new Room("in the computing admin office");
-            attic = new Room("in the dusty room upstairs");
+            outside = new Room("outside the main entrance of an old abandond PokeGym");
+            PokeGym = new Room("in a pokemon theatre");
+            pokecentre = new Room("in the broken down pokecenter");
+            lab= new Room("in a pokemon testing facility");
+            office = new Room("in the computing admin office, " + "there is a computer stil on... " + "it says that test subject 42 has failed, in 1982");
+            attic = new Room("in the dusty room upstairs, " + "ratata's have made it their home");
+            tree = new Room("in a broken tree house, " + "there are some pidgeons in here");
 
             // initialise room exits
-            outside.setExit("east", theatre);
+            outside.setExit("east", PokeGym);
             outside.setExit("south", lab);
-            outside.setExit("west", pub);
+            outside.setExit("west", pokecentre);
+            outside.setExit("up", tree);
 
-            theatre.setExit("up", attic);
-            attic.setExit("down", theatre);
+            tree.setExit("down", outside);
 
-            theatre.setExit("west", outside);
+            PokeGym.setExit("up", attic);
+            attic.setExit("down", PokeGym);
 
-            pub.setExit("east", outside);
+            PokeGym.setExit("west", outside);
+
+            pokecentre.setExit("east", outside);
 
             lab.setExit("north", outside);
             lab.setExit("east", office);
@@ -56,7 +60,8 @@ namespace ZuulCS
             // Enter the main command loop.  Here we repeatedly read commands and
             // execute them until the game is over.
             bool finished = false;
-            while (!finished) {
+            while (!finished)
+            {
                 Command command = parser.getCommand();
                 finished = processCommand(command);
             }
@@ -69,8 +74,8 @@ namespace ZuulCS
         private void printWelcome()
         {
             Console.WriteLine();
-            Console.WriteLine("Welcome to Zuul!");
-            Console.WriteLine("Zuul is a new, incredibly boring adventure game.");
+            Console.WriteLine("Welcome to HorrorMon!");
+            Console.WriteLine("HorrorMon is a new, amazing maze, horror game.");
             Console.WriteLine("Type 'help' if you need help.");
             Console.WriteLine();
             Console.WriteLine(player.CurrentRoom.getLongDescription());
@@ -85,13 +90,15 @@ namespace ZuulCS
         {
             bool wantToQuit = false;
 
-            if (command.isUnknown()) {
-                Console.WriteLine("I don't know what you mean...");
+            if (command.isUnknown())
+            {
+                Console.WriteLine("Try something else, " + "type 'help' for help");
                 return false;
             }
 
             string commandWord = command.getCommandWord();
-            switch (commandWord) {
+            switch (commandWord)
+            {
                 case "help":
                     printHelp();
                     break;
@@ -104,6 +111,13 @@ namespace ZuulCS
                 case "look":
                     looked();
                     break;
+                case "inventory":
+                    CheckInventory();
+                    break;
+                case "health":
+                    CheckHealth();
+                    break;
+
             }
 
             return wantToQuit;
@@ -123,6 +137,8 @@ namespace ZuulCS
             Console.WriteLine();
             Console.WriteLine("Your command words are:");
             parser.showCommands();
+            Console.WriteLine("----------------------------------------------------");
+
         }
 
         /**
@@ -131,7 +147,8 @@ namespace ZuulCS
 	     */
         private void goRoom(Command command)
         {
-            if (!command.hasSecondWord()) {
+            if (!command.hasSecondWord())
+            {
                 // if there is no second word, we don't know where to go...
                 Console.WriteLine("Go where?");
                 return;
@@ -142,11 +159,19 @@ namespace ZuulCS
             // Try to leave current room.
             Room nextRoom = player.CurrentRoom.getExit(direction);
 
-            if (nextRoom == null) {
-                Console.WriteLine("There is no door to " + direction + "!");
-            } else {
+            if (nextRoom == null)
+            {
+                Console.WriteLine("There is no door  " + direction + "!");
+                Console.WriteLine("----------------------------------------------------");
+            }
+            else
+            {
+                player.IsAlive();
+                player.Damage(5);
                 player.CurrentRoom = nextRoom;
                 Console.WriteLine(player.CurrentRoom.getLongDescription());
+                Console.WriteLine("----------------------------------------------------");
+
             }
         }
         public void looked()
@@ -154,5 +179,15 @@ namespace ZuulCS
             Console.WriteLine(player.CurrentRoom.getLongDescription());
         }
 
-	}
+        public void CheckInventory()
+        {
+           //Console.WriteLine(player.GetItem);
+
+        }
+
+        public void CheckHealth()
+        {
+            Console.WriteLine("Health: " + player.health);
+        }
+    }
 }

@@ -6,6 +6,7 @@ namespace ZuulCS
     public class Player
     {
         public Room currentRoom;
+        public uint health = 100;
 
         public Player()
         {
@@ -18,6 +19,24 @@ namespace ZuulCS
             set { currentRoom = value; }
         }
 
+        public void Damage(uint amount)
+        {
+            health -= amount;
+        }
+
+        public void Heal(uint amount)
+        {
+            health += amount;
+        }
+
+        public void IsAlive() {
+
+            if (health < 1)
+            {
+               Environment.Exit(0);
+            }
+
+        }
 
     }
 

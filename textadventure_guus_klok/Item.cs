@@ -6,5 +6,7 @@ namespace textadventure_guus_klok
 {
     class Item
     {
+        
+
     }
 }

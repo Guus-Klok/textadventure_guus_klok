@@ -6,6 +6,8 @@ namespace textadventure_guus_klok
 {
     class Inventory
     {
+        public uint CheckInventory;
+
         private List<Item> contents = new List<Item>();
         
         public void Add(Item item)
@@ -22,5 +24,7 @@ namespace textadventure_guus_klok
         {
             return contents[index];
         }
+
+        
     }
 }
