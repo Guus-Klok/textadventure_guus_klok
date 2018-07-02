@@ -25,6 +25,25 @@ namespace textadventure_guus_klok
             return contents[index];
         }
 
+        public void Grab(Item item)
+        {
+            if (HasItems())
+            {
+               Console.WriteLine("Picked up " + item);
+            }
+        }
+
+        private bool HasItems()
+        {
+            if (contents.Count > 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
         
     }
 }

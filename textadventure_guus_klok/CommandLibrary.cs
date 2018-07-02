@@ -19,6 +19,8 @@ namespace ZuulCS
                 "health",
 				"help",
                 "inventory",
+                "grab",
+                "use",
 			};
 		}
 
