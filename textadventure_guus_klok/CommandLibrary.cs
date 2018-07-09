@@ -21,6 +21,7 @@ namespace ZuulCS
                 "inventory",
                 "grab",
                 "use",
+                "exit"
 			};
 		}
 

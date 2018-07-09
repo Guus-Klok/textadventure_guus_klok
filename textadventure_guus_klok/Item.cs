@@ -2,13 +2,22 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace textadventure_guus_klok
+namespace ZuulCS
 {
-    class Item
+    public class Item
     {
-        public void HealthBoost(uint amount)
+        protected string name;
+        protected string description;
+
+        public Item()
         {
-           // += 10;
+            name = "";
+            description = "";
+        }
+
+        public virtual void Use()
+        {
+            //dostuff
         }
 
     }

@@ -7,16 +7,25 @@ namespace ZuulCS
     {
         public Room currentRoom;
         public uint health = 100;
+        public Pokedex pokedex;
+        private Inventory inventory;
 
         public Player()
         {
-
+            pokedex = new Pokedex();
         }
 
         public Room CurrentRoom
         {
-            get { return currentRoom; }
-            set { currentRoom = value; }
+            get
+            {
+                return currentRoom;
+            } 
+
+            set
+            {
+                currentRoom = value;
+            }
         }
 
         public void Damage(uint amount)
@@ -29,7 +38,8 @@ namespace ZuulCS
             health += amount;
         }
 
-        public void IsAlive() {
+        public void IsAlive()
+        {
 
             if (health < 1)
             {

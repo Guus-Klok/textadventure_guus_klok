@@ -4,6 +4,9 @@ namespace ZuulCS
 {
 	public class Room
 	{
+        private Inventory roomInventory;
+        private Pokedex pokedex;
+        internal Inventory RoomInventory { get => roomInventory; }
 		private string description;
 		private Dictionary<string, Room> exits; // stores exits of this room.
 
@@ -14,6 +17,7 @@ namespace ZuulCS
 	     */
 		public Room(string description)
 		{
+            roomInventory = new Inventory();
 			this.description = description;
 			exits = new Dictionary<string, Room>();
 		}

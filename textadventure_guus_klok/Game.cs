@@ -16,20 +16,22 @@ namespace ZuulCS
 
         private void createRooms()
         {
-            Room outside, pokegym, pokecentre, lab, office, attic, tree, gate, alley, sewer, end;
+            Room outside, pokegym, pokecentre, lab, office, attic, tree, gate, alley, sewer, sewerEnd, escape ,secretRoom;
 
             // create the rooms
             outside = new Room("outside the main entrance of an old abandond PokeGym");
             pokegym = new Room("in a pokemon theatre");
             pokecentre = new Room("in the broken down pokecenter");
-            lab= new Room("in a pokemon testing facility");
+            lab = new Room("in a pokemon testing facility");
             office = new Room("in the computing admin office, " + "there is a computer stil on... " + "it says that test subject 42 has failed, in 1982");
             attic = new Room("in the dusty room upstairs, " + "ratata's have made it their home");
             tree = new Room("in a broken tree house, " + "there are some pidgeys in here");
-            gate = new Room("outside the pokemon testing complexes, " + "congratulations you escaped!");
             alley = new Room("in a back alley behind the pokegym, " + "there are some stinky containers. " + "There is a coffin");
             sewer = new Room("down in the nasty, stinkey sewer, " + "you don't want to be here for long. " + "There is a long tunnel to the right");
-            end = new Room("at a dead end of the sewer! " + "there is no way else to go exept for back or up");
+            sewerEnd = new Room("at a dead end of the sewer! " + "there is no way else to go exept for back or up");
+            gate = new Room("outside the pokemon testing complexes gate, " + "go north to escape and win the game!");
+            escape = new Room("past the gate, " + "congratulations you escaped! " + "Type 'exit' to exit the game") ;
+            secretRoom = new Room("are in a secret room!, there is a Masterball in here. They are rumored to be able to catch a legendary pokemon on their first throw.");
 
             // initialise room exits
             outside.setExit("east", pokegym);
@@ -38,6 +40,9 @@ namespace ZuulCS
             outside.setExit("up", tree);
 
             tree.setExit("down", outside);
+
+            gate.setExit("north", escape);
+            gate.setExit("south", sewerEnd);
 
             pokegym.setExit("up", attic);
             pokegym.setExit("west", outside);
@@ -49,19 +54,27 @@ namespace ZuulCS
             alley.setExit("down", sewer);
 
             sewer.setExit("up", alley);
-            sewer.setExit("east", end);
+            sewer.setExit("east", sewerEnd);
 
-            end.setExit("up", gate);
-            end.setExit("south", sewer);
+            sewerEnd.setExit("up", gate);
+            sewerEnd.setExit("south", sewer);
 
             pokecentre.setExit("east", outside);
 
             lab.setExit("north", outside);
             lab.setExit("east", office);
+            lab.setExit("", secretRoom);
+
+            secretRoom.setExit("up", lab);
 
             office.setExit("west", lab);
 
-            player.CurrentRoom = outside;  // start game outside
+            //create items
+
+            tree.RoomInventory.GrabItem(new Item());
+
+            player.CurrentRoom = pokecentre;  // start game outside
+            
         }
 
         /**
@@ -133,10 +146,13 @@ namespace ZuulCS
                     CheckHealth();
                     break;
                 case "grab":
-                    //Grab();
+                    
                     break;
                 case "use":
                     UseItem();
+                    break;
+                case "exit":
+                    ExitGame();
                     break;
             }
 
@@ -152,8 +168,8 @@ namespace ZuulCS
 	     */
         private void printHelp()
         {
-            Console.WriteLine("You are lost. You are alone.");
-            Console.WriteLine("You wander around at the PokeGym.");
+            Console.WriteLine("You are lost. You have no pokeballs with you.");
+            Console.WriteLine("You wander around at the pokegym.");
             Console.WriteLine();
             Console.WriteLine("Your command words are:");
             parser.showCommands();
@@ -188,21 +204,29 @@ namespace ZuulCS
             else
             {
                 player.IsAlive();
-                player.Damage(5);
+                player.Damage(10);
                 player.CurrentRoom = nextRoom;
                 Console.WriteLine(player.CurrentRoom.getLongDescription());
                 Console.WriteLine("----------------------------------------------------");
 
             }
+
         }
-        public void looked()
+        private void looked()
         {
             Console.WriteLine(player.CurrentRoom.getLongDescription());
+            
+            Console.WriteLine(player.CurrentRoom.RoomInventory.Contents.Count + " Item(s) in the room!");
+            for (int i = 0; i < player.CurrentRoom.RoomInventory.Contents.Count; i++)
+            {
+
+            }
+            
         }
 
         public void CheckInventory()
         {
-           //Console.WriteLine(player.GetItem);
+            //Console.WriteLine(player.GrabItem);
 
         }
 
@@ -217,5 +241,11 @@ namespace ZuulCS
         {
 
         }
+
+        public void ExitGame()
+        {
+            Environment.Exit(0);
+        }
+
     }
 }
